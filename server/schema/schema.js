@@ -2,7 +2,7 @@ const graphql = require('graphql');
 //const _ = require('lodash');
 const Book = require('../models/book');
 const Author = require('../models/author')
-const Genrer = require('../models/genrer')
+const Genre = require('../models/genre')
 
 const { GraphQLSchema, GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLID, GraphQLList, GraphQLNonNull } = graphql;
 
@@ -36,15 +36,15 @@ const AuthorType = new GraphQLObjectType({
     })
 });
 
-const GenrerType = new GraphQLObjectType({
-    name: 'Genrer',
+const GenreType = new GraphQLObjectType({
+    name: 'Genre',
     fields: () => ({
        id: { type: GraphQLID },
        description: { type: GraphQLString },
        books: { 
            type: GraphQLList(BookType),
            resolve(parent, args){
-            return Book.find( { genrer: args.description });
+            return Book.find( { genre: args.description });
         }
      },
     })
@@ -80,17 +80,17 @@ const RootQuery = new GraphQLObjectType({
                 return Author.find({});
             }
         },
-        genrer: {
-            type: GenrerType,
+        genre: {
+            type: GenreType,
             args: { id: { type: GraphQLID }},
             resolve(parent, args){
                 return Book.findById(args.id)
             }
         },
-        genrers: {
-            type: new GraphQLList(GenrerType),
+        genres: {
+            type: new GraphQLList(GenreType),
             resolve(parent, args){
-                return Genrer.find({});
+                return Genre.find({});
             }
         },
     }
